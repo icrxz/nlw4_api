@@ -1,0 +1,25 @@
+import {Request, Response} from 'express'
+import { getRepository, RepositoryNotTreeError } from 'typeorm';
+
+import { User } from '../models/User.model';
+
+export default class UserController {
+  async create(request: Request, response: Response) {
+    const { name, email } = request.body;
+
+    const userRepository = getRepository(User);
+
+    const userAlreadyExists = await userRepository.findOne({
+      email
+    });
+
+    if(userAlreadyExists)
+      return response.status(400).json({ message: 'User already exists!' });
+
+    const user = userRepository.create({name, email});
+
+    await userRepository.save(user);
+
+    return response.json(user);
+  }
+}
