@@ -8,3 +8,6 @@
 # yarn errors
 yarn-debug.log*
 yarn-error.log*
+
+# ignore database
+*.sqlite
